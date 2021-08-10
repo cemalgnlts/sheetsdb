@@ -1,20 +1,30 @@
 {
-  "name": "sheetsdb",
-  "version": "1.0.0",
-  "description": "Google Sheets object modeling for JavaScript is like Mongoose.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cemalgnlts/sheetsdb.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cemalgnlts/sheetsdb/issues"
-  },
-  "homepage": "https://github.com/cemalgnlts/sheetsdb#readme"
+    "name": "sheetsdb",
+    "version": "1.0.0",
+    "description": "Google Sheets object modeling for JavaScript is like Mongoose.",
+    "main": "dist/sheetsdb.min.js",
+    "scripts": {
+        "run": "npm run build && npm run start",
+        "start": "node index.js",
+        "build": "webpack --config webpack.config.js --mode production"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cemalgnlts/sheetsdb.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cemalgnlts/sheetsdb/issues"
+    },
+    "homepage": "https://github.com/cemalgnlts/sheetsdb#readme",
+    "devDependencies": {
+        "webpack": "^5.49.0",
+        "webpack-cli": "^4.7.2",
+        "webpack-node-externals": "^3.0.0"
+    },
+    "dependencies": {
+        "node-fetch": "^2.6.1"
+    }
 }
