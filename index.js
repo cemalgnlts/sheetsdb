@@ -1,7 +1,7 @@
 const sheetsdb = require("./dist/sheetsdb-node.min.js");
 
 sheetsdb
-    .connect("AKfycbyDF8oPT7aM4ezlblKPONLsiWtkmoM6TzT7PuVKf12jDJHY1nImBlIZ9sPbyn3DM3CV")
+    .connect("AKfycbxjMEDV_6zcVhjp4gF4LPqlMar5tIocqKL0C9FqUBhA-JyqVXyImKafxtsp-LCZNneV")
     .then(connect)
     .catch(res => console.log("Error when connecting", res));
 
@@ -18,13 +18,8 @@ function connect(res) {
     saveData();
 }
 
-function saveData() {
-    Kitten.create({
-        name: "Silence",
-        age: 3,
-        gender: "M"
-    })
-    .then(console.log)
-    .catch(console.log)
+async function saveData() {
+    const res = await Kitten.findById(1628676210478);
+    console.log(res);
 }
 

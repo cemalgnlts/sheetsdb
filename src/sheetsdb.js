@@ -1,5 +1,10 @@
 import fetch from "node-fetch";
 
+const TYPES = {
+    "String": String,
+    "Number": Number
+};
+
 let baseUrl = null;
 
 export class Schema {
@@ -25,10 +30,30 @@ export class Schema {
 function Model(name, schema) {
     const schemaKeys = Object.keys(schema);
     const columnSize = schemaKeys.length;
+    const self = this;
 
     this.create = async (data) => {
-        const ret = await sendRequest("create", name, schema, data);
-        return ret.json();
+        const req = await sendRequest("create", name, schema, data);
+        return req.json();
+    }
+
+    this.insertMany = async (data) => {
+        const req = await sendRequest("insertMany", name, schema, data);
+        return req.json();
+    }
+
+    this.findById = async (id) => {
+        const req = await fetch(`${baseUrl}?action=findById&sheetName=${name}&id=${id}&hl=tr`);
+        const res = await req.json();
+        
+        self._id = res.data.shift();
+        
+        res.data.forEach(cell => {
+            const [name, value, type] = cell.split(";");
+            self[name] = TYPES[type](value);
+        });
+
+        return self;
     }
 }
 
