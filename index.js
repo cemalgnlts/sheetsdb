@@ -1,7 +1,7 @@
 const sheetsdb = require("./dist/sheetsdb-node.min.js");
 
 sheetsdb
-    .connect("AKfycbxjMEDV_6zcVhjp4gF4LPqlMar5tIocqKL0C9FqUBhA-JyqVXyImKafxtsp-LCZNneV")
+    .connect("AKfycbzBl3xjUyUIeWrw4Oh1gN9HnNtdfRjXxIf5ll2q6xnISKBE9YEmHnfNLvWcZWaevFQf")
     .then(connect)
     .catch(res => console.log("Error when connecting", res));
 
@@ -15,11 +15,11 @@ const Kitten = sheetsdb.model("Kitten", kittyScheme);
 
 function connect(res) {
     console.log("Connected", res.status);
-    saveData();
+    afterConnect();
 }
 
-async function saveData() {
-    const res = await Kitten.findById(1628676210478);
+async function afterConnect() {
+    const res = await Kitten.findOne({ name: "Blue" });
     console.log(res);
 }
 

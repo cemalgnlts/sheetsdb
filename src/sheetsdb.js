@@ -29,8 +29,20 @@ export class Schema {
 
 function Model(name, schema) {
     const schemaKeys = Object.keys(schema);
-    const columnSize = schemaKeys.length;
     const self = this;
+
+    const loadRow = (data) => {
+        if(!res.data)
+            return;
+        
+        self._id = data.shift();
+        
+        data.forEach(cell => {
+            const [name, value, type] = cell.split(";");
+            console.log(name, value, type);
+            self[name] = TYPES[type](value);
+        });
+    }
 
     this.create = async (data) => {
         const req = await sendRequest("create", name, schema, data);
@@ -42,16 +54,26 @@ function Model(name, schema) {
         return req.json();
     }
 
-    this.findById = async (id) => {
-        const req = await fetch(`${baseUrl}?action=findById&sheetName=${name}&id=${id}&hl=tr`);
+    this.find = async (data) => {
+        const req = await sendRequest("find", name, {}, data);
+        const res = await req.text();
+        console.log(res);
+    }
+
+    this.findOne = async (data) => {
+        const req = await sendRequest("findOne", name, {}, data);
         const res = await req.json();
         
-        self._id = res.data.shift();
-        
-        res.data.forEach(cell => {
-            const [name, value, type] = cell.split(";");
-            self[name] = TYPES[type](value);
-        });
+        loadRow(res.data);
+
+        return self;
+    }
+
+    this.findById = async (id) => {
+        const req = await fetch(`${baseUrl}?action=findById&sheetName=${name}&id=${id}`);
+        const res = await req.json();
+
+        loadRow(res.data);
 
         return self;
     }
@@ -68,7 +90,7 @@ export function model(name, schemaClass) {
 }
 
 function sendRequest(action, name, schema, data) {
-    return fetch(`${baseUrl}?action=${action}&sheetName=${name}`, {
+    return fetch(`${baseUrl}?action=${action}&sheetName=${name}&hl=tr`, {
         method: "POST",
         headers: {
             // To avoid getting stuck with the CORS policy.

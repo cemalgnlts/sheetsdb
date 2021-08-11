@@ -67,3 +67,11 @@ const res = await Kitten.findById(1628676210478);
 console.log(res.name)
 console.log(res);
 ```
+
+## Find One
+
+```js
+const res = await Kitten.findById({ name: "Silence" });
+console.log(res._id, "-", res.age)
+console.log(res);
+```
