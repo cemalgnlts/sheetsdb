@@ -6,39 +6,40 @@ export class Schema {
     constructor(schema) {
         this.schema = schema;
     }
+
+    getSchema() {
+        Object.keys(this.schema).forEach(key => {
+            let schemaData = this.schema[key];
+
+            if(schemaData.constructor.name === "Object") {
+
+            } else if(schemaData.constructor.name === "Function") {
+                this.schema[key] = schemaData.name;
+            }
+        });
+        
+        return this.schema;
+    }
 }
 
-class Model {
-    constructor(name, schema) {
-        this._name = name;
-        this._schema = schema;
-        this._columnSize = Object.keys(schema).length;
-    }
+function Model(name, schema) {
+    const schemaKeys = Object.keys(schema);
+    const columnSize = schemaKeys.length;
 
-    async create(data) {
-        const ret = await sendRequest("create", this._name, this._schema, data);
-        return ret.text();
+    this.create = async (data) => {
+        const ret = await sendRequest("create", name, schema, data);
+        return ret.json();
     }
 }
 
 export async function connect(dbId) {
     baseUrl = `https://script.google.com/macros/s/${dbId}/exec`;
-    const req = await new fetch(baseUrl);
+    const req = await new fetch(`${baseUrl}?action=ping`);
     return req.json();
 }
 
-export async function model(name, schema) {
-    try{
-        let req = await fetch(`${baseUrl}?action=init&sheetName=${name}`);
-        const res = await req.json();
-        console.log("data", res);
-        if(res.status === true) {
-            return new Model(name, schema);
-        } else
-            throw res.message;
-    } catch(e) {
-        throw e;
-    }
+export function model(name, schemaClass) {
+    return new Model(name, schemaClass.getSchema());
 }
 
 function sendRequest(action, name, schema, data) {
@@ -48,6 +49,6 @@ function sendRequest(action, name, schema, data) {
             // To avoid getting stuck with the CORS policy.
             "Content-Type": "text/plain"
         },
-        body: JSON.stringify({schema, data})
+        body: JSON.stringify({ schema, data })
     });
 }

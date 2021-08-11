@@ -12,7 +12,13 @@
         "type": "git",
         "url": "git+https://github.com/cemalgnlts/sheetsdb.git"
     },
-    "keywords": [],
+    "keywords": [
+        "serverless",
+        "mongoose",
+        "google-spreadsheet",
+        "google-apps-script",
+        "sheets"
+    ],
     "author": "",
     "license": "MIT",
     "bugs": {

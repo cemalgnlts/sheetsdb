@@ -1,8 +1,8 @@
 const sheetsdb = require("./dist/sheetsdb-node.min.js");
 
 sheetsdb
-    .connect("AKfycbxwpM6Qw1yvv_OyQ9INRSB4CQgDd-lTFBxJiM1kqimeYj6h-PHtelbcYWbqCGbMowLK")
-    .then(onReady)
+    .connect("AKfycbyDF8oPT7aM4ezlblKPONLsiWtkmoM6TzT7PuVKf12jDJHY1nImBlIZ9sPbyn3DM3CV")
+    .then(connect)
     .catch(res => console.log("Error when connecting", res));
 
 const kittyScheme = new sheetsdb.Schema({
@@ -11,15 +11,20 @@ const kittyScheme = new sheetsdb.Schema({
     gender: String
 });
 
-async function onReady() {
-    console.log("connected!");
-    const Kitten = await sheetsdb.model("Kitten", kittyScheme);
+const Kitten = sheetsdb.model("Kitten", kittyScheme);
+
+function connect(res) {
+    console.log("Connected", res.status);
+    saveData();
+}
+
+function saveData() {
     Kitten.create({
         name: "Silence",
         age: 3,
         gender: "M"
     })
-        .then(console.log)
-        .catch(console.log)
+    .then(console.log)
+    .catch(console.log)
 }
 
